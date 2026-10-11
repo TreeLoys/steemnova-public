@@ -4,8 +4,6 @@
 	<h1>{$descHeader}</h1>
 	<p class="desc">{$descText}</p>
 	<p class="desc"><ul id="desc_list">{foreach $gameInformations as $info}<li>{$info}</li>{/foreach}</ul></p>
-	<p><a href="https://busy.org/@steemnova/steemnova-ogame-based-browsergame-for-steemians" target="copy">SteemNova - OGame-based browsergame for Steemians by @steemnova [busy.org]</a>
-	</p>
 </section>
 <section>
 	<div class="contentbox">
