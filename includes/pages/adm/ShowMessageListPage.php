@@ -126,6 +126,7 @@ function ShowMessageListPage()
 		'page'			=> $page,
 		'messageList'	=> $messageList,
 		'type'			=> $type,
+		'Selected'		=> $type,
 		'dateStart'		=> $dateStart,
 		'dateEnd'		=> $dateEnd,
 		'sender'		=> $sender,
