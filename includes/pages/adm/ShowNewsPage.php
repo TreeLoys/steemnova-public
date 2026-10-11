@@ -27,7 +27,7 @@ function ShowNewsPage(){
 		$query		= ($_GET['mode'] == 2) ? "INSERT INTO ".NEWS." (`id` ,`user` ,`date` ,`title` ,`text`) VALUES ( NULL , '".$USER['username']."', '".TIMESTAMP."', '".$title."', '".$text."');" : "UPDATE ".NEWS." SET `title` = '".$title."', `text` = '".$text."', `date` = '".TIMESTAMP."' WHERE `id` = '".$edit_id."' LIMIT 1;";
 		
 		$GLOBALS['DATABASE']->query($query);
-	} elseif($_GET['action'] == 'delete' && isset($_GET['id'])) {
+	} elseif(($_GET['action'] ?? '') == 'delete' && isset($_GET['id'])) {
 		$GLOBALS['DATABASE']->query("DELETE FROM ".NEWS." WHERE `id` = '".HTTP::_GP('id', 0)."';");
 	}
 

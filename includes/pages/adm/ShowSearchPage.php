@@ -87,9 +87,16 @@ function ShowSearchPage()
 	if (HTTP::_GP('minimize', '') == 'on')
 	{
 		$Minimize			= "&amp;minimize=on";
-		$template->assign_vars(array(	
+		$template->assign_vars(array(
 			'minimize'	=> 'checked = "checked"',
 			'diisplaay'	=> 'style="display:none;"',
+		));
+	}
+	else
+	{
+		$template->assign_vars(array(
+			'minimize'	=> '',
+			'diisplaay'	=> '',
 		));
 	}
 
