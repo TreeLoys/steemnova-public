@@ -30,7 +30,9 @@ if (function_exists('mb_internal_encoding')) {
 }
 
 ignore_user_abort(true);
-error_reporting(E_ALL & ~E_STRICT);
+// PHP 8.x emits E_DEPRECATED/E_NOTICE/E_WARNING for legacy 2Moons code;
+// the custom errorHandler would turn them into fatal ErrorException.
+error_reporting(E_ALL & ~E_STRICT & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 
 // If date.timezone is invalid
 date_default_timezone_set(@date_default_timezone_get());

@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="styles/resource/css/base/jquery.fancybox.css?v={$REV}">
 	<link rel="stylesheet" type="text/css" href="styles/resource/css/login/icon-font/style.css?v={$REV}">
 	<link rel="stylesheet" type="text/css" href="styles/resource/css/login/steemconnect_button.css?v={$REV}">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" type="text/css">
+	<!-- Google Fonts removed for offline local deploy -->
 	<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
 	<title>{block name="title"} - {$gameName}{/block}</title>
 	<meta name="keywords" content="SteemNova, Steem, Browsergame, MMOSG, MMOG, Strategy, XNova, 2Moons, Space">
