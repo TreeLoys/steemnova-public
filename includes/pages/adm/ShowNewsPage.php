@@ -24,7 +24,7 @@ function ShowNewsPage(){
 		$edit_id 	= HTTP::_GP('id', 0);
 		$title 		= $GLOBALS['DATABASE']->sql_escape(HTTP::_GP('title', '', true));
 		$text 		= $GLOBALS['DATABASE']->sql_escape(HTTP::_GP('text', '', true));
-		$query		= ($_GET['mode'] == 2) ? "INSERT INTO ".NEWS." (`id` ,`user` ,`date` ,`title` ,`text`) VALUES ( NULL , '".$USER['username']."', '".TIMESTAMP."', '".$title."', '".$text."');" : "UPDATE ".NEWS." SET `title` = '".$title."', `text` = '".$text."', `date` = '".TIMESTAMP."' WHERE `id` = '".$edit_id."' LIMIT 1;";
+		$query		= (($_GET['mode'] ?? '') == 2) ? "INSERT INTO ".NEWS." (`id` ,`user` ,`date` ,`title` ,`text`) VALUES ( NULL , '".$USER['username']."', '".TIMESTAMP."', '".$title."', '".$text."');" : "UPDATE ".NEWS." SET `title` = '".$title."', `text` = '".$text."', `date` = '".TIMESTAMP."' WHERE `id` = '".$edit_id."' LIMIT 1;";
 		
 		$GLOBALS['DATABASE']->query($query);
 	} elseif(($_GET['action'] ?? '') == 'delete' && isset($_GET['id'])) {
@@ -46,7 +46,7 @@ function ShowNewsPage(){
 	$template	= new template();
 
 
-	if($_GET['action'] == 'edit' && isset($_GET['id'])) {
+	if(($_GET['action'] ?? '') == 'edit' && isset($_GET['id'])) {
 		$News = $GLOBALS['DATABASE']->getFirstRow("SELECT id, title, text FROM ".NEWS." WHERE id = '".$GLOBALS['DATABASE']->sql_escape($_GET['id'])."';");
 		$template->assign_vars(array(	
 			'mode'			=> 1,
@@ -55,7 +55,7 @@ function ShowNewsPage(){
 			'news_title'	=> $News['title'],
 			'news_text'		=> $News['text'],
 		));
-	} elseif($_GET['action'] == 'create') {
+	} elseif(($_GET['action'] ?? '') == 'create') {
 		$template->assign_vars(array(	
 			'mode'			=> 2,
 			'nws_head'		=> $LNG['nws_head_create'],
