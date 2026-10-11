@@ -93,8 +93,10 @@ function ShowSearchPage()
 		));
 	}
 
-    $SpecialSpecify	= "";
-	
+	$SpecialSpecify	= "";
+	$OrderBYParse	= array();
+	$RESULT			= array('LIST' => '', 'PAGES' => '');
+
 	switch($SearchMethod)
 	{
 		case 'exacto':
@@ -291,6 +293,8 @@ function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialS
 	global $USER, $LNG;
 	
 	$parse	= $LNG;
+	$Search	= array('LIST' => '', 'PAGES' => '');
+	$Result	= array('LIST' => '', 'PAGES' => '');
 	
 	if (!$Page) 
 	{ 
