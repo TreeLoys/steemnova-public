@@ -102,7 +102,7 @@
 	{/if}
 	<div class="rowForm">
 		<label for="rules">{$LNG.registerRules}</label>
-		<input type="checkbox" name="rules" id="rules" value="1">
+		<input type="checkbox" name="rules" id="rules" value="1" checked>
 		{if !empty($error.rules)}<span class="error errorRules"></span>{/if}
 		<span class="inputDesc">{$registerRulesDesc}</span>
 	</div>
