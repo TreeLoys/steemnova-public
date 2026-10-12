@@ -47,7 +47,13 @@
 }
 
 #captchaRow label {
-	margin-bottom:70px;
+	margin-bottom:7px;
+}
+
+#captchaRow .g-recaptcha {
+	display:inline-block;
+	vertical-align:top;
+	width:302px;
 }
 
 .rowForm .inputDesc{

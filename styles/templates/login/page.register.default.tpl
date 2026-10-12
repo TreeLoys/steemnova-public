@@ -82,11 +82,8 @@
 	{/if}
 	{if $recaptchaEnable}
 	<div class="rowForm" id="captchaRow">
-		<div>
-			<label>{$LNG.registerCaptcha}</label>
-			<!--<span class="inputDesc">{$LNG.registerCaptchaDesc}</span>-->
-			<div class="g-recaptcha" data-sitekey="{$recaptchaPublicKey}"></div>
-		</div>
+		<label>{$LNG.registerCaptcha}</label>
+		<div class="g-recaptcha" data-sitekey="{$recaptchaPublicKey}"></div>
 		<div class="clear"></div>
 	</div>
 	{/if}
