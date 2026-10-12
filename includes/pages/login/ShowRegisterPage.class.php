@@ -133,6 +133,9 @@ class ShowRegisterPage extends AbstractLoginPage
 			list($payload, $signature) = explode('.', $_COOKIE['extauth'], 2);
 			if(hash_equals(hash_hmac('sha256', $payload, $salt), $signature))
 			{
+				// undo url-safe base64 (see ShowExternalAuthPage)
+				$payload		= strtr($payload, '-_', '+/');
+				$payload		.= str_repeat('=', (4 - strlen($payload) % 4) % 4);
 				$extAuthData	= json_decode(base64_decode($payload), true);
 				if(!empty($extAuthData['a']) && !empty($extAuthData['m']) && $extAuthData['e'] > TIMESTAMP)
 				{

@@ -65,11 +65,13 @@ class ShowExternalAuthPage extends AbstractLoginPage
 			// and anonymous sessions do not survive this class' shutdown.
 			// config.php only defines $salt inside the including scope.
 			$salt = (function() { require 'includes/config.php'; return isset($salt) ? $salt : ''; })();
-			$payload	= base64_encode(json_encode(array(
+			// url-safe base64 without '=' padding: PHP cookie parsing
+			// would otherwise split the value on the padding characters
+			$payload	= rtrim(strtr(base64_encode(json_encode(array(
 				'a'	=> (string) $authObj->getAccount(),
 				'm'	=> $method,
 				'e'	=> TIMESTAMP + 900,
-			)));
+			))), '+/', '-_'), '=');
 			$signature	= hash_hmac('sha256', $payload, $salt);
 			setcookie('extauth', $payload.'.'.$signature, array(
 				'expires'	=> TIMESTAMP + 900,
