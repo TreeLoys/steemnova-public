@@ -585,6 +585,9 @@ footer{
 .google-btn {
     font: inherit;
     cursor: pointer;
+    margin: 0 auto 5px auto;
+    display: block;
+    border-radius: 8px;
 }
 
 .google-btn svg {
