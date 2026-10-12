@@ -25,6 +25,7 @@
 					</div>
 				</form>
 				{if $facebookEnable}<a href="#" data-href="index.php?page=externalAuth&method=facebook" class="fb_login"><img src="styles/resource/images/facebook/fb-connect-large.png" alt=""></a>{/if}
+				{if $googleEnable}<a href="index.php?page=externalAuth&amp;method=google" style="display:block;margin:10px 0 0;padding:9px 12px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:4px;text-decoration:none;font-weight:600;text-align:center;">{$LNG.loginGoogle}</a>{/if}
 								
 				<a href="/index.php?page=register"><input value="{$LNG.buttonRegister}"></a>
 				<!-- <br><span class="small">{$loginInfo}</span> -->

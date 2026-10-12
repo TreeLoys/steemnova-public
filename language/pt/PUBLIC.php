@@ -156,3 +156,7 @@ $LNG['disclamerLabelAddress']		= 'Game Address:';
 $LNG['disclamerLabelPhone']			= 'Telephone Nr.:';
 $LNG['disclamerLabelMail']			= 'Support Adress:';
 $LNG['disclamerLabelNotice']		= 'More information';
+
+$LNG['loginGoogle']           = 'Sign in with Google';
+$LNG['loginGoogleButton']     = 'Continue with Google';
+$LNG['registerGoogleBound']   = 'Google account linked';

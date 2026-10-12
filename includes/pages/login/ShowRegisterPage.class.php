@@ -122,16 +122,20 @@ class ShowRegisterPage extends AbstractLoginPage
 		
 		$referralID 	= HTTP::_GP('referralID', 0);
 
-		$externalAuth	= HTTP::_GP('externalAuth', array());
-		if(!isset($externalAuth['account'], $externalAuth['method']))
+		// bind the external account only when it was verified in this
+		// session by the externalAuth callback; the GET/POST param alone is spoofable
+		$session			= Session::create();
+		$externalAuth		= HTTP::_GP('externalAuth', array());
+		if(!empty($session->extAuthAccount) && isset($externalAuth['method'])
+			&& strtolower(str_replace(array('_', '\\', '/', '.', "\0"), '', $externalAuth['method'])) === (string) $session->extAuthMethod)
 		{
-			$externalAuthUID	= 0;
-			$externalAuthMethod	= '';
+			$externalAuthUID	= $session->extAuthAccount;
+			$externalAuthMethod	= (string) $session->extAuthMethod;
 		}
 		else
 		{
-			$externalAuthUID	= $externalAuth['account'];
-			$externalAuthMethod	= strtolower(str_replace(array('_', '\\', '/', '.', "\0"), '', $externalAuth['method']));
+			$externalAuthUID	= 0;
+			$externalAuthMethod	= '';
 		}
 		
 		$errors 	= array();
@@ -234,21 +238,6 @@ class ShowRegisterPage extends AbstractLoginPage
 			)));
 		}
 
-		$path	= 'includes/extauth/'.$externalAuthMethod.'.class.php';
-
-		if(!empty($externalAuth['account']) && file_exists($path))
-		{
-			require($path);
-
-			$methodClass		= ucwords($externalAuthMethod).'Auth';
-			/** @var $authObj externalAuth */
-			$authObj			= new $methodClass;
-			$externalAuthUID	= 0;
-			if($authObj->isActiveMode() && $authObj->isValid()) {
-				$externalAuthUID	= $authObj->getAccount();
-			}
-		}
-		
 		if($config->ref_active == 1 && !empty($referralID))
 		{
 			$sql = "SELECT COUNT(*) as state FROM %%USERS%% WHERE id = :referralID AND universe = :universe;";

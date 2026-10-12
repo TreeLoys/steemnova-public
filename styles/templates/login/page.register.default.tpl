@@ -18,11 +18,17 @@
 		<span class="text fbname">{$accountName}</span>
 	</div>
 	{/if}
-	{elseif empty($referralData.id)}
-	{if $facebookEnable}
+	{if $googleEnable && $externalAuth.method == 'google'}
 	<div class="rowForm">
-		<label>{$LNG.registerFacebookAccount}</label>
-		<a href="#" data-href="index.php?page=externalAuth&method=facebook" class="fb_login"><img src="styles/resource/images/facebook/fb-connect-large.png" alt=""></a>
+		<label>{$LNG.loginGoogle}</label>
+		<span class="text fbname">{$LNG.registerGoogleBound}</span>
+	</div>
+	{/if}
+	{elseif empty($referralData.id)}
+	{if $googleEnable}
+	<div class="rowForm">
+		<label>{$LNG.loginGoogle}</label>
+		<a href="index.php?page=externalAuth&amp;method=google" style="display:inline-block;padding:9px 12px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:4px;text-decoration:none;font-weight:600;">{$LNG.loginGoogleButton}</a>
 	</div>
 	{/if}
 	{/if}

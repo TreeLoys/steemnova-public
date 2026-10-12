@@ -160,3 +160,7 @@ $LNG['disclamerLabelNotice']		= 'Ayrintili bilgi';
 
  //Giris Sayfasi
  $LNG['Browser']				= 'Onerilen browser.';
+
+$LNG['loginGoogle']           = 'Sign in with Google';
+$LNG['loginGoogleButton']     = 'Continue with Google';
+$LNG['registerGoogleBound']   = 'Google account linked';

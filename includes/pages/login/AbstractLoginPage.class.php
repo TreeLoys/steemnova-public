@@ -94,6 +94,7 @@ abstract class AbstractLoginPage
 			'recaptchaPublicKey'	=> $config->cappublic,
 			'gameName' 				=> $config->game_name,
 			'facebookEnable'		=> $config->fb_on,
+			'googleEnable'			=> isset($config->google_on) ? $config->google_on : 0,
 			'fb_key' 				=> $config->fb_apikey,
 			'mailEnable'			=> $config->mail_active,
 			'reg_close'				=> $config->reg_closed,

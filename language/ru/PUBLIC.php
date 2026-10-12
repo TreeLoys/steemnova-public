@@ -151,3 +151,7 @@ $LNG['disclamerLabelAddress']       = 'Адрес:';
 $LNG['disclamerLabelPhone']         = 'Телефон:';
 $LNG['disclamerLabelMail']          = 'Электронная почта:';
 $LNG['disclamerLabelNotice']        = 'Дополнительная информация';
+
+$LNG['loginGoogle']           = 'Войти через Google';
+$LNG['loginGoogleButton']     = 'Продолжить через Google';
+$LNG['registerGoogleBound']   = 'Аккаунт Google привязан';

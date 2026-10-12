@@ -57,10 +57,13 @@ class ShowExternalAuthPage extends AbstractLoginPage
 		}
 		
 		$loginData	= $authObj->getLoginData();
-		
+
 		if(empty($loginData))
 		{
-			$session->delete();
+			// keep the verified account in the session so the registration
+			// form can bind it server-side (the GET param alone is spoofable)
+			$session->extAuthAccount	= $authObj->getAccount();
+			$session->extAuthMethod		= $method;
 			$this->redirectTo('index.php?page=register&externalAuth[account]='.$authObj->getAccount().'&externalAuth[method]='.$method);
 		}
 

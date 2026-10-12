@@ -143,3 +143,7 @@ $LNG['disclamerLabelMail']			= 'Email support:';
 $LNG['disclamerLabelNotice']		= 'Plus d\'informations';
 
 ?>
+
+$LNG['loginGoogle']           = 'Sign in with Google';
+$LNG['loginGoogleButton']     = 'Continue with Google';
+$LNG['registerGoogleBound']   = 'Google account linked';

@@ -154,3 +154,7 @@ $LNG['disclamerLabelAddress']		= 'Dirección:';
 $LNG['disclamerLabelPhone']			= 'Nr. de Teléfono:';
 $LNG['disclamerLabelMail']			= 'Dirección de E-Mail:';
 $LNG['disclamerLabelNotice']		= 'Información de Contacto';
+
+$LNG['loginGoogle']           = 'Sign in with Google';
+$LNG['loginGoogleButton']     = 'Continue with Google';
+$LNG['registerGoogleBound']   = 'Google account linked';
