@@ -292,7 +292,9 @@ class ShowRegisterPage extends AbstractLoginPage
 			$errors[]	= $LNG['registerErrorMailExist'];
 		}
 		
-		if ($config->capaktiv == 1)
+		// Google-verified players skip the captcha: Google already
+		// confirmed they are human during the OAuth consent
+		if ($config->capaktiv == 1 && empty($extAuthData))
 		{
             require('includes/libs/reCAPTCHA/autoload.php');
 

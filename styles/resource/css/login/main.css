@@ -581,35 +581,15 @@ footer{
 	padding-left:110px;
 	text-align:left;
 }
-/* Google sign-in button */
+/* Google sign-in button: native form button look */
 .google-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 250px;
-    height: 36px;
-    background: #fff;
-    border: 1px solid #dadce0;
-    border-radius: 4px;
-    color: #3c4043;
-    font-family: Roboto, Arial, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    box-shadow: 0 1px 2px rgba(60, 64, 67, .15);
-    vertical-align: middle;
-    transition: background .2s, box-shadow .2s;
-}
-
-.google-btn:hover {
-    background: #f8f9fa;
-    box-shadow: 0 1px 4px rgba(60, 64, 67, .3);
-    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
 }
 
 .google-btn svg {
-    width: 18px;
-    height: 18px;
-    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
+    margin-right: 6px;
 }
