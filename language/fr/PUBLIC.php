@@ -147,3 +147,6 @@ $LNG['disclamerLabelNotice']		= 'Plus d\'informations';
 $LNG['loginGoogle']           = 'Sign in with Google';
 $LNG['loginGoogleButton']     = 'Continue with Google';
 $LNG['registerGoogleBound']   = 'Google account linked';
+
+$LNG['registerGoogleEmailNote']   = 'taken from your Google account';
+$LNG['registerGooglePassNote']    = 'Not needed — you sign in with Google';

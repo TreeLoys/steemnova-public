@@ -155,3 +155,6 @@ $LNG['disclamerLabelNotice']        = 'Дополнительная информ
 $LNG['loginGoogle']           = 'Войти через Google';
 $LNG['loginGoogleButton']     = 'Продолжить через Google';
 $LNG['registerGoogleBound']   = 'Аккаунт Google привязан';
+
+$LNG['registerGoogleEmailNote']   = 'из вашего аккаунта Google';
+$LNG['registerGooglePassNote']    = 'Не нужен — вход через Google';

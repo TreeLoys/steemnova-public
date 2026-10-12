@@ -36,10 +36,22 @@
 	{/if}
 	<div class="rowForm">
 		<label for="username">{$LNG.registerUsername}</label>
-		<input type="text" class="input" name="username" id="username" maxlenght="32">
+		<input type="text" class="input" name="username" id="username" maxlenght="32" value="{$extUsername}">
 		{if !empty($error.username)}<span class="error errorUsername"></span>{/if}
 		<span class="inputDesc">{$LNG.registerUsernameDesc}</span>
 	</div>
+	{if $extVerified}
+	<div class="rowForm">
+		<label>{$LNG.registerEmail}</label>
+		<span class="text" style="display:inline-block;margin:7px 0;vertical-align:middle;">{$extEmail} — {$LNG.registerGoogleEmailNote}</span>
+		<div class="clear"></div>
+	</div>
+	<div class="rowForm">
+		<label>{$LNG.registerPassword}</label>
+		<span class="text" style="display:inline-block;margin:7px 0;vertical-align:middle;">{$LNG.registerGooglePassNote}</span>
+		<div class="clear"></div>
+	</div>
+	{else}
 	<div class="rowForm">
 		<label for="password">{$LNG.registerPassword}</label>
 		<input type="password" class="input" name="password" id="password">
@@ -64,6 +76,7 @@
 		{if !empty($error.emailReplay)}<span class="error errorEmailReplay"></span>{/if}
 		<span class="inputDesc">{$LNG.registerEmailReplayDesc}</span>
 	</div>
+	{/if}
 	{if count($languages) > 1}
 	<div class="rowForm">
 		<label for="language">{$LNG.registerLanguage}</label>

@@ -87,71 +87,129 @@ class ShowRegisterPage extends AbstractLoginPage
 			}
 		}
 		
+		// verified Google handshake: prefill username/email and hide the
+		// password/mail rows in the template
+		$extAuthData	= $this->getVerifiedExtAuth();
+		$extUsername	= '';
+		$extEmail		= '';
+		if(!empty($extAuthData['em']))
+		{
+			$extUsername	= $this->nicknameFromEmail($extAuthData['em']);
+			$extEmail		= $extAuthData['em'];
+		}
+
 		$this->assign(array(
 			'referralData'		=> $referralData,
 			'accountName'		=> $accountName,
 			'externalAuth'		=> $externalAuth,
 			'universeSelect'	=> $universeSelect,
 			'registerPasswordDesc'	=> sprintf($LNG['registerPasswordDesc'], 6),
-			'registerRulesDesc'	=> sprintf($LNG['registerRulesDesc'], '<a href="index.php?page=rules">'.$LNG['menu_rules'].'</a>')
+			'registerRulesDesc'	=> sprintf($LNG['registerRulesDesc'], '<a href="index.php?page=rules">'.$LNG['menu_rules'].'</a>'),
+			'extVerified'		=> !empty($extAuthData),
+			'extUsername'		=> $extUsername,
+			'extEmail'			=> $extEmail,
 		));
 		
 		$this->display('page.register.default.tpl');
 	}
 	
-	function send() 
-	{
-		global $LNG;
-		$config		= Config::get();
-
-		if($config->game_disable == 0 || $config->reg_closed == 1)
+		// verified external-auth handshake (HMAC-signed cookie set by
+		// ShowExternalAuthPage) — returns account/method/email or an empty array
+		private function getVerifiedExtAuth()
 		{
-			$this->printMessage($LNG['registerErrorUniClosed'], array(array(
-				'label'	=> $LNG['registerBack'],
-				'url'	=> 'javascript:window.history.back()',
-			)));
+			$salt = (function() { require 'includes/config.php'; return isset($salt) ? $salt : ''; })();
+			if(empty($_COOKIE['extauth']) || strpos($_COOKIE['extauth'], '.') === false)
+			{
+				return array();
+			}
+
+			list($payload, $signature) = explode('.', $_COOKIE['extauth'], 2);
+			if(!hash_equals(hash_hmac('sha256', $payload, $salt), $signature))
+			{
+				return array();
+			}
+
+			// undo url-safe base64 (see ShowExternalAuthPage)
+			$payload	= strtr($payload, '-_', '+/');
+			$payload	.= str_repeat('=', (4 - strlen($payload) % 4) % 4);
+			$extAuthData	= json_decode(base64_decode($payload), true);
+			if(empty($extAuthData['a']) || empty($extAuthData['m']) || $extAuthData['e'] <= TIMESTAMP)
+			{
+				return array();
+			}
+
+			$requestedMethod	= HTTP::_GP('externalAuth', array());
+			$requestedMethod	= isset($requestedMethod['method'])
+				? strtolower(str_replace(array('_', '\\', '/', '.', "\0"), '', $requestedMethod['method']))
+				: '';
+
+			if($requestedMethod !== $extAuthData['m'])
+			{
+				return array();
+			}
+
+			return $extAuthData;
 		}
 
-		$userName 		= HTTP::_GP('username', '', UTF8_SUPPORT);
-		$password 		= HTTP::_GP('password', '', true);
-		$password2 		= HTTP::_GP('passwordReplay', '', true);
-		$mailAddress 	= HTTP::_GP('email', '');
-		$mailAddress2	= HTTP::_GP('emailReplay', '');
-		$rulesChecked	= HTTP::_GP('rules', 0);
-		$language 		= HTTP::_GP('lang', '');
-		
-		$referralID 	= HTTP::_GP('referralID', 0);
-
-		// bind the external account only when the HMAC-signed cookie from the
-		// externalAuth callback is valid; the GET/POST param alone is spoofable
-		// config.php only defines $salt inside the including scope.
-		$salt = (function() { require 'includes/config.php'; return isset($salt) ? $salt : ''; })();
-		$externalAuthUID	= 0;
-		$externalAuthMethod	= '';
-		if(!empty($_COOKIE['extauth']) && strpos($_COOKIE['extauth'], '.') !== false)
+		// suggest a valid nickname from a Google-verified email address
+		private function nicknameFromEmail($email)
 		{
-			list($payload, $signature) = explode('.', $_COOKIE['extauth'], 2);
-			if(hash_equals(hash_hmac('sha256', $payload, $salt), $signature))
-			{
-				// undo url-safe base64 (see ShowExternalAuthPage)
-				$payload		= strtr($payload, '-_', '+/');
-				$payload		.= str_repeat('=', (4 - strlen($payload) % 4) % 4);
-				$extAuthData	= json_decode(base64_decode($payload), true);
-				if(!empty($extAuthData['a']) && !empty($extAuthData['m']) && $extAuthData['e'] > TIMESTAMP)
-				{
-					$requestedMethod	= HTTP::_GP('externalAuth', array());
-					$requestedMethod	= isset($requestedMethod['method'])
-						? strtolower(str_replace(array('_', '\\', '/', '.', "\0"), '', $requestedMethod['method']))
-						: '';
+			$nickname	= strtolower(preg_replace('/[^a-zA-Z0-9_.\-]/', '', strtok($email, '@')));
+			$nickname	= substr($nickname, 0, 25);
 
-					if($requestedMethod === $extAuthData['m'])
-					{
-						$externalAuthUID	= $extAuthData['a'];
-						$externalAuthMethod	= $extAuthData['m'];
-					}
+			if(strlen($nickname) < 3)
+			{
+				$nickname	= 'player'.substr((string) TIMESTAMP, -5);
+			}
+
+			return $nickname;
+		}
+
+		function send()
+		{
+			global $LNG;
+			$config		= Config::get();
+
+			if($config->game_disable == 0 || $config->reg_closed == 1)
+			{
+				$this->printMessage($LNG['registerErrorUniClosed'], array(array(
+					'label'	=> $LNG['registerBack'],
+					'url'	=> 'javascript:window.history.back()',
+				)));
+			}
+
+			$userName 		= HTTP::_GP('username', '', UTF8_SUPPORT);
+			$password 		= HTTP::_GP('password', '', true);
+			$password2 		= HTTP::_GP('passwordReplay', '', true);
+			$mailAddress 	= HTTP::_GP('email', '');
+			$mailAddress2	= HTTP::_GP('emailReplay', '');
+			$rulesChecked	= HTTP::_GP('rules', 0);
+			$language 		= HTTP::_GP('lang', '');
+
+			$referralID 	= HTTP::_GP('referralID', 0);
+
+			// bind the external account only when the HMAC-signed cookie from the
+			// externalAuth callback is valid; the GET/POST param alone is spoofable
+			$extAuthData	= $this->getVerifiedExtAuth();
+			if(!empty($extAuthData))
+			{
+				// Google-verified autofill: username from the email prefix,
+				// email from Google, random password when the player skips one
+				if(empty($userName) && !empty($extAuthData['em']))
+				{
+					$userName	= $this->nicknameFromEmail($extAuthData['em']);
+				}
+				if(empty($mailAddress) && !empty($extAuthData['em']))
+				{
+					$mailAddress = $mailAddress2 = $extAuthData['em'];
+				}
+				if(empty($password) && empty($password2))
+				{
+					$password = $password2 = substr(bin2hex(random_bytes(6)), 0, 10);
 				}
 			}
-		}
+			$externalAuthUID	= empty($extAuthData['a']) ? 0 : $extAuthData['a'];
+			$externalAuthMethod	= empty($extAuthData['m']) ? '' : $extAuthData['m'];
 		
 		$errors 	= array();
 		

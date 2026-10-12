@@ -67,10 +67,14 @@ class ShowExternalAuthPage extends AbstractLoginPage
 			$salt = (function() { require 'includes/config.php'; return isset($salt) ? $salt : ''; })();
 			// url-safe base64 without '=' padding: PHP cookie parsing
 			// would otherwise split the value on the padding characters
+			// hand email/name along so the registration form can be prefilled
+			$accountData	= $authObj->getAccountData();
 			$payload	= rtrim(strtr(base64_encode(json_encode(array(
 				'a'	=> (string) $authObj->getAccount(),
 				'm'	=> $method,
 				'e'	=> TIMESTAMP + 900,
+				'em'	=> isset($accountData['email']) ? $accountData['email'] : '',
+				'nm'	=> isset($accountData['name']) ? $accountData['name'] : '',
 			))), '+/', '-_'), '=');
 			$signature	= hash_hmac('sha256', $payload, $salt);
 			setcookie('extauth', $payload.'.'.$signature, array(
