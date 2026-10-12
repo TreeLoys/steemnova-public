@@ -124,7 +124,8 @@ class ShowRegisterPage extends AbstractLoginPage
 
 		// bind the external account only when the HMAC-signed cookie from the
 		// externalAuth callback is valid; the GET/POST param alone is spoofable
-		global $salt;
+		// config.php only defines $salt inside the including scope.
+		$salt = (function() { require 'includes/config.php'; return isset($salt) ? $salt : ''; })();
 		$externalAuthUID	= 0;
 		$externalAuthMethod	= '';
 		if(!empty($_COOKIE['extauth']) && strpos($_COOKIE['extauth'], '.') !== false)

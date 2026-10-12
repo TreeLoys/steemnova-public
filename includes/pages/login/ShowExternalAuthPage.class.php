@@ -63,7 +63,8 @@ class ShowExternalAuthPage extends AbstractLoginPage
 			// hand the verified account to the registration form via a
 			// short-lived HMAC-signed cookie; the GET param alone is spoofable
 			// and anonymous sessions do not survive this class' shutdown.
-			global $salt;
+			// config.php only defines $salt inside the including scope.
+			$salt = (function() { require 'includes/config.php'; return isset($salt) ? $salt : ''; })();
 			$payload	= base64_encode(json_encode(array(
 				'a'	=> (string) $authObj->getAccount(),
 				'm'	=> $method,
