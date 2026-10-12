@@ -208,6 +208,7 @@ class Session
 	    // sessions require an valid user.
 	    if(empty($this->data['userId'])) {
 	        $this->delete();
+	        return;
 	    }
 
         $userIpAddress = self::getClientIp();

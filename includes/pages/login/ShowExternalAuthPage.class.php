@@ -60,10 +60,25 @@ class ShowExternalAuthPage extends AbstractLoginPage
 
 		if(empty($loginData))
 		{
-			// keep the verified account in the session so the registration
-			// form can bind it server-side (the GET param alone is spoofable)
-			$session->extAuthAccount	= $authObj->getAccount();
-			$session->extAuthMethod		= $method;
+			// hand the verified account to the registration form via a
+			// short-lived HMAC-signed cookie; the GET param alone is spoofable
+			// and anonymous sessions do not survive this class' shutdown.
+			global $salt;
+			$payload	= base64_encode(json_encode(array(
+				'a'	=> (string) $authObj->getAccount(),
+				'm'	=> $method,
+				'e'	=> TIMESTAMP + 900,
+			)));
+			$signature	= hash_hmac('sha256', $payload, $salt);
+			setcookie('extauth', $payload.'.'.$signature, array(
+				'expires'	=> TIMESTAMP + 900,
+				'path'		=> '/',
+				'secure'	=> true,
+				'httponly'	=> true,
+				'samesite'	=> 'Lax',
+			));
+
+			$session->delete();
 			$this->redirectTo('index.php?page=register&externalAuth[account]='.$authObj->getAccount().'&externalAuth[method]='.$method);
 		}
 

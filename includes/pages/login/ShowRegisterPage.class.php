@@ -122,20 +122,31 @@ class ShowRegisterPage extends AbstractLoginPage
 		
 		$referralID 	= HTTP::_GP('referralID', 0);
 
-		// bind the external account only when it was verified in this
-		// session by the externalAuth callback; the GET/POST param alone is spoofable
-		$session			= Session::create();
-		$externalAuth		= HTTP::_GP('externalAuth', array());
-		if(!empty($session->extAuthAccount) && isset($externalAuth['method'])
-			&& strtolower(str_replace(array('_', '\\', '/', '.', "\0"), '', $externalAuth['method'])) === (string) $session->extAuthMethod)
+		// bind the external account only when the HMAC-signed cookie from the
+		// externalAuth callback is valid; the GET/POST param alone is spoofable
+		global $salt;
+		$externalAuthUID	= 0;
+		$externalAuthMethod	= '';
+		if(!empty($_COOKIE['extauth']) && strpos($_COOKIE['extauth'], '.') !== false)
 		{
-			$externalAuthUID	= $session->extAuthAccount;
-			$externalAuthMethod	= (string) $session->extAuthMethod;
-		}
-		else
-		{
-			$externalAuthUID	= 0;
-			$externalAuthMethod	= '';
+			list($payload, $signature) = explode('.', $_COOKIE['extauth'], 2);
+			if(hash_equals(hash_hmac('sha256', $payload, $salt), $signature))
+			{
+				$extAuthData	= json_decode(base64_decode($payload), true);
+				if(!empty($extAuthData['a']) && !empty($extAuthData['m']) && $extAuthData['e'] > TIMESTAMP)
+				{
+					$requestedMethod	= HTTP::_GP('externalAuth', array());
+					$requestedMethod	= isset($requestedMethod['method'])
+						? strtolower(str_replace(array('_', '\\', '/', '.', "\0"), '', $requestedMethod['method']))
+						: '';
+
+					if($requestedMethod === $extAuthData['m'])
+					{
+						$externalAuthUID	= $extAuthData['a'];
+						$externalAuthMethod	= $extAuthData['m'];
+					}
+				}
+			}
 		}
 		
 		$errors 	= array();
