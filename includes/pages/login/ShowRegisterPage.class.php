@@ -230,7 +230,7 @@ class ShowRegisterPage extends AbstractLoginPage
 			$errors[]	= $LNG['registerErrorMailExist'];
 		}
 		
-		if ($config->capaktiv === '1')
+		if ($config->capaktiv == 1)
 		{
             require('includes/libs/reCAPTCHA/autoload.php');
 
