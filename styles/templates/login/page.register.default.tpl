@@ -21,14 +21,16 @@
 	{if $googleEnable && $externalAuth.method == 'google'}
 	<div class="rowForm">
 		<label>{$LNG.loginGoogle}</label>
-		<span class="text fbname">{$LNG.registerGoogleBound}</span>
+		<span class="text" style="display:inline-block;margin:7px 0 7px;vertical-align:middle;">{$LNG.registerGoogleBound}</span>
+		<div class="clear"></div>
 	</div>
 	{/if}
 	{elseif empty($referralData.id)}
 	{if $googleEnable}
 	<div class="rowForm">
 		<label>{$LNG.loginGoogle}</label>
-		<a href="index.php?page=externalAuth&amp;method=google" style="display:inline-block;padding:9px 12px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:4px;text-decoration:none;font-weight:600;">{$LNG.loginGoogleButton}</a>
+		<a href="index.php?page=externalAuth&amp;method=google" style="display:inline-block;margin:2px 0;padding:8px 14px;background:#fff;color:#3c4043;border:1px solid #dadce0;border-radius:4px;text-decoration:none;font-weight:600;">{$LNG.loginGoogleButton}</a>
+		<div class="clear"></div>
 	</div>
 	{/if}
 	{/if}

@@ -239,7 +239,9 @@ class ShowRegisterPage extends AbstractLoginPage
             require('includes/libs/reCAPTCHA/autoload.php');
 
             $recaptcha = new \ReCaptcha\ReCaptcha($config->capprivate);
-            $resp = $recaptcha->verify(HTTP::_GP('g-recaptcha-response', ''), Session::getClientIp());
+            // no remoteip: behind the xray->nginx chain the PHP side only
+            // sees 127.0.0.1, which would make Google reject valid tokens
+            $resp = $recaptcha->verify(HTTP::_GP('g-recaptcha-response', ''));
             if (!$resp->isSuccess())
             {
                 $errors[]	= $LNG['registerErrorCaptcha'];
